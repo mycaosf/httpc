@@ -159,10 +159,10 @@ func (p *Client) Request(method, url string, body io.Reader) (*http.Response, er
 	var err error
 	var req *http.Request
 
-	if p.ctx == nil {
+	if p.Ctx == nil {
 		req, err = http.NewRequest(method, url, body)
 	} else {
-		req, err = http.NewRequestWithContext(p.ctx, method, url, body)
+		req, err = http.NewRequestWithContext(p.Ctx, method, url, body)
 	}
 	if err != nil {
 		return nil, err
@@ -233,5 +233,5 @@ func (p *Client) RequestForm(method, url string, data url.Values) (*http.Respons
 type Client struct {
 	Header  http.Header
 	Timeout *Timeout
-	ctx     context.Context
+	Ctx     context.Context
 }
