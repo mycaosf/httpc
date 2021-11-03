@@ -2,6 +2,7 @@ package httpc
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
@@ -155,7 +156,14 @@ func (p *Client) RequestXML(method, url string, body interface{}, v interface{})
 //Request request a http command.
 func (p *Client) Request(method, url string, body io.Reader) (*http.Response, error) {
 	client := &http.Client{Transport: CreateTransport(p.Timeout, false)}
-	req, err := http.NewRequest(method, url, body)
+	var err error
+	var req *http.Request
+
+	if p.ctx == nil {
+		req, err = http.NewRequest(method, url, body)
+	} else {
+		req, err = http.NewRequestWithContext(p.ctx, method, url, body)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -225,4 +233,5 @@ func (p *Client) RequestForm(method, url string, data url.Values) (*http.Respons
 type Client struct {
 	Header  http.Header
 	Timeout *Timeout
+	ctx     context.Context
 }

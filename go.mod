@@ -1,3 +1,3 @@
 module github.com/mycaosf/httpc
 
-go 1.14
+go 1.17
